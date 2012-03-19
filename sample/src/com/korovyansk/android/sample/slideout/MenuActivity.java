@@ -11,7 +11,7 @@ public class MenuActivity extends FragmentActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    mSlideoutHelper = new SlideoutHelper(this, false);
+	    mSlideoutHelper = new SlideoutHelper(this);
 	    mSlideoutHelper.activate();
 	    getSupportFragmentManager().beginTransaction().add(com.korovyansk.android.slideout.R.id.slideout_placeholder, new MenuFragment(), "menu").commit();
 	    mSlideoutHelper.open();
@@ -28,12 +28,6 @@ public class MenuActivity extends FragmentActivity{
 	}
 
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		//mSlideoutHelper.close();
-	}
-	
 	public SlideoutHelper getSlideoutHelper(){
 		return mSlideoutHelper;
 	}

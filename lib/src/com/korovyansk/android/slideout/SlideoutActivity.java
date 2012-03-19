@@ -2,6 +2,7 @@ package com.korovyansk.android.slideout;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 public class SlideoutActivity extends Activity {
 
@@ -17,9 +18,12 @@ public class SlideoutActivity extends Activity {
 	}
 
 	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		mSlideoutHelper.close();
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			mSlideoutHelper.close();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 	
 	private SlideoutHelper mSlideoutHelper;
