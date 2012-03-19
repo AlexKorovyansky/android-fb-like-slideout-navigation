@@ -6,7 +6,7 @@
 
     <uses-sdk android:minSdkVersion="7" />
 
-    <application
+    <application android:theme="@android:style/Theme.NoTitleBar"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
@@ -17,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.korovyansk.android.slideout.SlideoutActivity" >
+        <activity
+            android:label="@string/app_name"
+            android:name=".MenuActivity" >
         </activity>
     </application>
 

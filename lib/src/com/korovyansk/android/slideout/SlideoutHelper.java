@@ -28,10 +28,15 @@ public class SlideoutHelper {
 		sWidth = width;
 	}
 
-	public SlideoutHelper(Activity activity){
-		mActivity = activity;
+	public SlideoutHelper(Activity activity) {
+		this(activity, false);
 	}
 	
+	public SlideoutHelper(Activity activity, boolean reverse) {
+		mActivity = activity;
+		mReverse = reverse;
+	}
+
 	public void activate() {
 		mActivity.setContentView(R.layout.slideout);
 		mCover = (ImageView) mActivity.findViewById(R.id.slidedout_cover);
@@ -43,26 +48,45 @@ public class SlideoutHelper {
 			}
 		});
 		int x = (int) (sWidth * 1.2f);
-		@SuppressWarnings("deprecation")
-		final android.widget.AbsoluteLayout.LayoutParams lp = new android.widget.AbsoluteLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, x, 0);
-		mActivity.findViewById(R.id.slideout_placeholder)
-				.setLayoutParams(lp);
+		if (mReverse) {
+			@SuppressWarnings("deprecation")
+			final android.widget.AbsoluteLayout.LayoutParams lp = new android.widget.AbsoluteLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, x, 0);
+			mActivity.findViewById(R.id.slideout_placeholder).setLayoutParams(lp);
+		} else{
+			@SuppressWarnings("deprecation")
+			final android.widget.AbsoluteLayout.LayoutParams lp = new android.widget.AbsoluteLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 0, 0);
+			mActivity.findViewById(R.id.slideout_placeholder).setLayoutParams(lp);
+		}
+		initAnimations();
 	}
 
 	public void open() {
-		int displayWidth = ((WindowManager) mActivity
-				.getSystemService(Context.WINDOW_SERVICE))
-				.getDefaultDisplay().getWidth();
-		final int shift = displayWidth - sWidth;
-		final Animation translateCover = new TranslateAnimation(
+		mCover.startAnimation(mStartAnimation);
+	}
+
+	public void close() {
+		mCover.startAnimation(mStopAnimation);
+	}
+
+	protected void initAnimations() {
+		int displayWidth = ((WindowManager) mActivity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+		final int shift = (mReverse ? -1 : 1) * (sWidth - displayWidth);
+		mStartAnimation = new TranslateAnimation(
 				TranslateAnimation.ABSOLUTE, 0,
 				TranslateAnimation.ABSOLUTE, -shift,
 				TranslateAnimation.ABSOLUTE, 0,
-				TranslateAnimation.ABSOLUTE, 0);
-		translateCover.setDuration(400);
-		translateCover.setFillAfter(true);
-		translateCover.setAnimationListener(new AnimationListener() {
+				TranslateAnimation.ABSOLUTE, 0
+				);
+
+		mStopAnimation = new TranslateAnimation(
+				TranslateAnimation.ABSOLUTE, 0,
+				TranslateAnimation.ABSOLUTE, shift,
+				TranslateAnimation.ABSOLUTE, 0,
+				TranslateAnimation.ABSOLUTE, 0
+				);
+		mStartAnimation.setDuration(DURATION_MS);
+		mStartAnimation.setFillAfter(true);
+		mStartAnimation.setAnimationListener(new AnimationListener() {
 
 			@Override
 			public void onAnimationStart(Animation animation) {
@@ -76,27 +100,14 @@ public class SlideoutHelper {
 			public void onAnimationEnd(Animation animation) {
 				mCover.setAnimation(null);
 				@SuppressWarnings("deprecation")
-				final android.widget.AbsoluteLayout.LayoutParams lp = new android.widget.AbsoluteLayout.LayoutParams(
-						LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT,
-						-shift, 0);
+				final android.widget.AbsoluteLayout.LayoutParams lp = new android.widget.AbsoluteLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, -shift, 0);
 				mCover.setLayoutParams(lp);
 			}
 		});
-		mCover.startAnimation(translateCover);
-	}
 
-	public void close() {
-		int displayWidth = ((WindowManager) mActivity
-				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
-				.getWidth();
-		final int shift = displayWidth - sWidth;
-		final Animation translateCover = new TranslateAnimation(
-				TranslateAnimation.ABSOLUTE, 0, TranslateAnimation.ABSOLUTE,
-				shift, TranslateAnimation.ABSOLUTE, 0,
-				TranslateAnimation.ABSOLUTE, 0);
-		translateCover.setDuration(400);
-		translateCover.setFillAfter(true);
-		translateCover.setAnimationListener(new AnimationListener() {
+		mStopAnimation.setDuration(DURATION_MS);
+		mStopAnimation.setFillAfter(true);
+		mStopAnimation.setAnimationListener(new AnimationListener() {
 
 			@Override
 			public void onAnimationStart(Animation animation) {
@@ -112,9 +123,12 @@ public class SlideoutHelper {
 				mActivity.overridePendingTransition(0, 0);
 			}
 		});
-		mCover.startAnimation(translateCover);
 	}
 
+	private static final int DURATION_MS = 400;
 	private ImageView mCover;
 	private Activity mActivity;
+	private boolean mReverse = false;
+	private Animation mStartAnimation;
+	private Animation mStopAnimation;
 }
