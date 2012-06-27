@@ -3,11 +3,13 @@ package com.korovyansk.android.slideout;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.provider.MediaStore.Video;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout.LayoutParams;
@@ -19,11 +21,11 @@ public class SlideoutHelper {
 	private static Bitmap sCoverBitmap = null;
 	private static int sWidth = -1;
 
-	public static void prepare(Activity activity, int id, int width) {
+	public static void prepare(Activity activity, int width) {
 		if (sCoverBitmap != null) {
 			sCoverBitmap.recycle();
 		}
-		final ScreenShot screenShot = new ScreenShot(activity, id);
+		final ScreenShot screenShot = new ScreenShot(activity);
 		sCoverBitmap = screenShot.snap();
 		sWidth = width;
 	}
@@ -44,7 +46,9 @@ public class SlideoutHelper {
 		mCover.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				close();
+				if (!isRunning(mStartAnimation) && !isRunning(mStopAnimation)) {
+					close();
+				}
 			}
 		});
 		int x = (int) (sWidth * 1.2f);
@@ -66,6 +70,14 @@ public class SlideoutHelper {
 
 	public void close() {
 		mCover.startAnimation(mStopAnimation);
+	}
+	
+	public boolean isRunning(Animation animation){
+		return !animation.hasEnded() && animation.hasStarted();
+	}
+	
+	public void setSlideOutEndCallback(SlideOutEndCallback callback){
+		this.mCallback = callback;
 	}
 
 	protected void initAnimations() {
@@ -104,7 +116,6 @@ public class SlideoutHelper {
 				mCover.setLayoutParams(lp);
 			}
 		});
-
 		mStopAnimation.setDuration(DURATION_MS);
 		mStopAnimation.setFillAfter(true);
 		mStopAnimation.setAnimationListener(new AnimationListener() {
@@ -121,6 +132,9 @@ public class SlideoutHelper {
 			public void onAnimationEnd(Animation animation) {
 				mActivity.finish();
 				mActivity.overridePendingTransition(0, 0);
+				if (mCallback != null) {
+					mCallback.run();
+				}
 			}
 		});
 	}
@@ -131,4 +145,5 @@ public class SlideoutHelper {
 	private boolean mReverse = false;
 	private Animation mStartAnimation;
 	private Animation mStopAnimation;
+	private SlideOutEndCallback mCallback;
 }
