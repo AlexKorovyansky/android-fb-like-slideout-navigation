@@ -7,6 +7,13 @@ Example of usage is provided in demo project.
 --Developed by-- 
 Alex Korovyansky - korovyansk@gmail.com
 
+--Modifyed By--
+黄祥旦 Stoned - xd_huang1986@163.com
+
+在Alex版本的基础上做了以下几件事情(What I'v done)： 
+1. 支持包含titlebar的布局（ Support titlebar layout ）
+2. 支持多个activity切换 (Support multiple activities)
+
 --License--
 http://www.apache.org/licenses/LICENSE-2.0
 
