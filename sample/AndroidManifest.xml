@@ -4,13 +4,14 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="7"
+        android:targetSdkVersion="11" />
 
-    <application android:theme="@android:style/Theme.NoTitleBar"
+    <application android:theme="@style/AppTheme"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:label="@string/app_name"
+            android:label="Simple Sample"
             android:name=".SampleActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +20,15 @@
         </activity>
         <activity
             android:label="@string/app_name"
-            android:name=".MenuActivity" >
+            android:name=".MenuActivity"
+            android:theme="@style/MenuTheme" >
+        </activity>
+        <activity android:name=".SampleActionbarActivity"
+            android:label="Sample With Actionbar">
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

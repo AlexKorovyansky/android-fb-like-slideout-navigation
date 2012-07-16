@@ -3,16 +3,17 @@ package com.korovyansk.android.slideout;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout.LayoutParams;
-
-import com.korovyansk.android.slideout.utils.ScreenShot;
 
 public class SlideoutHelper {
 
