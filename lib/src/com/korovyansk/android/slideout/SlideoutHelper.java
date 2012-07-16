@@ -23,8 +23,21 @@ public class SlideoutHelper {
 		if (sCoverBitmap != null) {
 			sCoverBitmap.recycle();
 		}
-		final ScreenShot screenShot = new ScreenShot(activity, id);
-		sCoverBitmap = screenShot.snap();
+		Rect rectgle = new Rect();
+		Window window = activity.getWindow();
+		window.getDecorView().getWindowVisibleDisplayFrame(rectgle);
+		int statusBarHeight = rectgle.top;
+
+		ViewGroup v1 = (ViewGroup) activity.findViewById(id).getRootView();
+		v1.setDrawingCacheEnabled(true);
+		Bitmap source = Bitmap.createBitmap(v1.getDrawingCache());
+		v1.setDrawingCacheEnabled(false);
+		if (statusBarHeight != 0) {
+			sCoverBitmap = Bitmap.createBitmap(source, 0, statusBarHeight, source.getWidth(), source.getHeight() - statusBarHeight);
+			source.recycle();
+		} else {
+			sCoverBitmap = source;
+		}
 		sWidth = width;
 	}
 
