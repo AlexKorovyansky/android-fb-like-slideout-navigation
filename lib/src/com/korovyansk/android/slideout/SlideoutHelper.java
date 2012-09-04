@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -20,7 +19,12 @@ public class SlideoutHelper {
 	private static Bitmap sCoverBitmap = null;
 	private static int sWidth = -1;
 
+	@Deprecated
 	public static void prepare(Activity activity, int id, int width) {
+		prepare(activity, width);
+	}
+
+	public static void prepare(Activity activity, int width) {
 		if (sCoverBitmap != null) {
 			sCoverBitmap.recycle();
 		}
@@ -29,7 +33,7 @@ public class SlideoutHelper {
 		window.getDecorView().getWindowVisibleDisplayFrame(rectgle);
 		int statusBarHeight = rectgle.top;
 
-		ViewGroup v1 = (ViewGroup) activity.findViewById(id).getRootView();
+		View v1 = activity.getWindow().getDecorView().getRootView();
 		v1.setDrawingCacheEnabled(true);
 		Bitmap source = Bitmap.createBitmap(v1.getDrawingCache());
 		v1.setDrawingCacheEnabled(false);
