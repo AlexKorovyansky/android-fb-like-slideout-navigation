@@ -31,9 +31,8 @@ public class MenuFragment extends ListFragment{
 	class MySlideOutEndCallback implements SlideOutEndCallback{
 
 		@Override
-		public void run() {
+		public void run(boolean isBack) {
 			startActivity(new Intent(getActivity(), mSelectedItemIndex % 2 == 1 ? Sample2Activity.class : SampleActivity.class));
-		}
-		
+		}		
 	}
 }
