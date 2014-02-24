@@ -1,3 +1,8 @@
+--Update--
+Library is DEPRECATED and OUTDATED. You should use Navigation Drawer to build great Android Apps
+* https://developer.android.com/design/patterns/navigation-drawer.html
+* http://www.youtube.com/watch?v=F5COhlbpIbY&feature=share
+
 --Summary--
 Easy portable library project for facebook like slideout navigation.
 You can see how it works in this short demo - http://youtu.be/Cqu7YdNMzeQ.
